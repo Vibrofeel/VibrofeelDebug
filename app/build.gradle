@@ -1,0 +1,48 @@
+
+buildscript {
+    repositories {
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath "gradle.plugin.com.github.johnrengelman:shadow:7.1.2"
+    }
+}
+
+plugins {
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id 'application'
+}
+
+apply plugin: 'com.github.johnrengelman.shadow'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'junit:junit:4.13.2'
+
+    implementation 'com.google.guava:guava:30.1.1-jre'
+
+    implementation "com.fazecast:jSerialComm:2.8.2"
+    shadow "com.fazecast:jSerialComm:2.8.2"
+
+}
+
+application {
+    mainClass = 'vibrofeeldebug.Main'
+}
+
+
+shadowJar {
+    configurations = [project.configurations.shadow]
+    classifier 'budle'
+    relocate 'com.fazecast:jSerialComm:2.8.2', "com.fazecast.vibrofeel:jSerialComm:2.8.2"
+}
+jar {
+  manifest {
+    attributes(
+      'Main-Class': 'vibrofeeldebug.Main'
+    )
+  }
+}
